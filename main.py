@@ -6,6 +6,8 @@ import sys
 import math
 import pyqtgraph as pg
 import numpy as np
+import threshold
+import cv2
 
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -13,47 +15,35 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        self.ui.widget_2.getPlotItem().hideAxis('bottom')
+        self.ui.widget_2.getPlotItem().hideAxis('left')
+        self.ui.widget_1.getPlotItem().hideAxis('bottom')
+        self.ui.widget_1.getPlotItem().hideAxis('left')
+        self.ui.widget_3.getPlotItem().hideAxis('bottom')
+        self.ui.widget_3.getPlotItem().hideAxis('left')
 
-    def global_threshold_v_127(self,img):
-        thresh = 100
-        binary = img > thresh
-        for i in range(0,len(binary),1):
-            for j in range(0,len(binary),1):
-                if binary[i][j] == True:
-                    binary[i][j] = 256
-                else:
-                    binary[i][j]=0
+        self.image_1 = cv2.rotate(cv2.imread("Threshold images\Lenna.png",0),cv2.ROTATE_90_CLOCKWISE)
 
-        return binary
+        self.ui.pushButton_2.clicked.connect(self.doing_global_threshold)
+        self.ui.pushButton_1.clicked.connect(self.doing_local_treshold)
+        self.ui.pushButton_3.clicked.connect(self.doing_otsu)
+
+
+    def doing_global_threshold(self):
+        new_img = threshold.global_threshold(self.image_1, 127)
+        out = pg.ImageItem(new_img)
+        self.ui.widget_2.addItem(out)
 
     
-    def local_treshold(self,input_img):
-        h, w = input_img.shape
-        S = w/8
-        s2 = S/2
-        T = 15.0
-        #integral img
-        int_img = np.zeros_like(input_img, dtype=np.uint32)
-        for col in range(w):
-            for row in range(h):
-                int_img[row,col] = input_img[0:row,0:col].sum()
-        #output img
-        out_img = np.zeros_like(input_img)    
-        for col in range(w):
-            for row in range(h):
-                #SxS region
-                y0 = int(max(row-s2, 0))
-                y1 = int(min(row+s2, h-1))
-                x0 = int(max(col-s2, 0))
-                x1 = int(min(col+s2, w-1))
-                count = (y1-y0)*(x1-x0)
-                sum_ = int_img[y1, x1]-int_img[y0, x1]-int_img[y1, x0]+int_img[y0, x0]
-                if input_img[row, col]*count < sum_*(100.-T)/100.:
-                    out_img[row,col] = 0
-                else:
-                    out_img[row,col] = 255
-        return out_img
+    def doing_local_treshold(self):
+        new_img = threshold.local_threshold(self.image_1)
+        out = pg.ImageItem(new_img)
+        self.ui.widget_1.addItem(out)
 
+    def doing_otsu(self):
+        new_img = threshold.otsu(self.image_1)
+        out = pg.ImageItem(new_img)
+        self.ui.widget_3.addItem(out)
 
 
 

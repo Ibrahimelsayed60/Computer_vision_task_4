@@ -68,9 +68,5 @@ def otsu(gray):
     return final_img
 
 
-image = cv2.imread("Lenna.png",0)
-# image_result = global_threshold(image, 80)
-#image_result = local_threshold(image)
-image_result = otsu(image)
-plt.imshow(image_result,cmap='gray')
-plt.show()
+
+
