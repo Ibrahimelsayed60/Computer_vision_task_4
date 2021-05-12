@@ -41,7 +41,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_1.addItem(out)
 
     def doing_otsu(self):
-        new_img = threshold.otsu(self.image_1)
+        thres = threshold.otsu_threshold(self.image_1)
+        new_img = threshold.otsu_global(self.image_1,thres)
         out = pg.ImageItem(new_img)
         self.ui.widget_3.addItem(out)
 
