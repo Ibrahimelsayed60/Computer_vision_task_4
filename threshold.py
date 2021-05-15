@@ -105,34 +105,33 @@ def otsu_local(input_img,threshold):
                 out_img[row,col] = 255
     return out_img
 
+
 def otsu_threshold(img):
-    im = ((img - img.min())*(1/(img.max() - img.min()))*255).astype('uint8')
-    # Histogram
-    pixel_counts = [np.sum(im == i) for i in range(256)]
-    s_max = (0,-np.inf)
-    
+    min_intensity = img.min()
+    max_intensity = img.max()
+    image = ((img - min_intensity) * (1 / (max_intensity - min_intensity))*255).astype('uint8')
+
+    ##### Get the histogram
+    pixel_counts = [np.sum(image==i) for i in range(256)]
+    sn_max = (0,-np.inf)
+
+    ###### For loop to apply the equations of probability
     for threshold in range(256):
-        # update
         n1 = sum(pixel_counts[:threshold])
         n2 = sum(pixel_counts[threshold:])
 
-        mu_1 = sum([i * pixel_counts[i] for i in range(0,threshold)]) / n1 if n1 > 0 else 0       
-        mu_2 = sum([i * pixel_counts[i] for i in range(threshold, 256)]) / n2 if n2 > 0 else 0
+        mean1 = sum([i * pixel_counts[i] for i in range(0,threshold)]) / n1 if n1 > 0 else 0
+        mean2 = sum([i * pixel_counts[i] for i in range(threshold,256)]) / n2 if n2 > 0 else 0
 
-        # calculate between-variance
-        s = n1 * n2 * (mu_1 - mu_2) ** 2
+        ###### Calulate the variance
+        s = n1 * n2 * (mean1 - mean2) ** 2
+        if s > sn_max[1]:
+            sn_max = (threshold,s)
 
-        if s > s_max[1]:
-            s_max = (threshold, s)
-    
-    t = (s_max[0]/255)*(img.max()-img.min()) + img.min() 
-    return t
+    t = (sn_max[0]/255)*(max_intensity-min_intensity) + min_intensity 
+    return t   
 
 
-image = cv2.imread("Threshold images\Henry_Moore_Sculpture_0252.jpg",0)
-thres = otsu_threshold(image)
-print(thres)
-final = otsu_local(image,thres)
-plt.imshow(final,cmap='gray')
-plt.show()
+
+
 

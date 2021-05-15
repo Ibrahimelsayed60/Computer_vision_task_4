@@ -23,6 +23,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_3.getPlotItem().hideAxis('left')
 
         self.image_1 = cv2.rotate(cv2.imread("Threshold images\Lenna.png",0),cv2.ROTATE_90_CLOCKWISE)
+        self.image_2 = cv2.rotate(cv2.imread("Threshold images\DNA_011.TIF",0),cv2.ROTATE_90_CLOCKWISE)
 
         self.ui.pushButton_2.clicked.connect(self.doing_global_threshold)
         self.ui.pushButton_1.clicked.connect(self.doing_local_treshold)
@@ -41,12 +42,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_1.addItem(out)
 
     def doing_otsu(self):
-        thres = threshold.otsu_threshold(self.image_1)
-        new_img = threshold.otsu_global(self.image_1,thres)
+        thres = threshold.otsu_threshold(self.image_2)
+        new_img = threshold.otsu_global(self.image_2,thres)
         out = pg.ImageItem(new_img)
         self.ui.widget_3.addItem(out)
-
-
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
