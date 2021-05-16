@@ -2,6 +2,8 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import math
+import copy
 
 def global_threshold(image,threshold):
     binary = image > threshold
@@ -68,42 +70,67 @@ def otsu(gray):
     final_img[gray < final_thresh] = 0
     return final_img
 
-def otsu_global(image,threshold):
-    binary = image > threshold
-    for i in range(0,binary.shape[0],1):
-        for j in range(0,(binary.shape[1]),1):
-            if binary[i][j] == True:
-                binary[i][j] = 256
-            else:
-                binary[i][j]=0
-    return binary
+def otsu_global_threshold(image):
+    no_rows = image.shape[0]
+    no_cols = image.shape[1]
+    imageSize = no_rows * no_cols
+    graylevel = range(0,256)
+    ### Histogram 
+    hist = [0] * 256
+    for i in range(0,256):
+        hist[i] = len(np.extract(np.asarray(image) == graylevel[i],image))
+    #counts,histo = np.histogram(image)
+    variance = []
+    for i in range(256):
+        threshold = i
+        background_gray_level =  np.extract(np.asarray(graylevel) < threshold, graylevel)
+        foreground_gray_level =  np.extract(np.asarray(graylevel) >= threshold, graylevel)
+        background_hist = []
+        foreground_hist = []
+
+        ##### Weights(W_g, W_f)
+        back_weight = 0
+        fore_weight = 0
+        ##### mean (m_g, m_f)
+        back_mean =   0
+        fore_mean =   0
+
+        background_length = len(background_gray_level)
+        foreground_length = len(foreground_gray_level)
+
+        if background_length != 0:
+            for i in background_gray_level:
+                background_hist.append(hist[i])
+                total_back_hist = sum(background_hist)
+                back_weight = float(total_back_hist) / imageSize
+
+            if back_weight != 0:
+
+                back_mean = np.sum(np.multiply(background_gray_level,np.asarray(background_hist))) / float(sum(background_hist))
 
 
-def otsu_local(input_img,threshold):
-    h, w = input_img.shape
-    S = w/8
-    s2 = S/2
-        #integral img
-    int_img = np.zeros_like(input_img, dtype=np.uint32)
-    for col in range(w):
-        for row in range(h):
-            int_img[row,col] = input_img[0:row,0:col].sum()
-        #output img
-    out_img = np.zeros_like(input_img)    
-    for col in range(w):
-        for row in range(h):
-                #SxS region
-            y0 = int(max(row-s2, 0))
-            y1 = int(min(row+s2, h-1))
-            x0 = int(max(col-s2, 0))
-            x1 = int(min(col+s2, w-1))
-            count = (y1-y0)*(x1-x0)
-            sum_ = int_img[y1, x1]-int_img[y0, x1]-int_img[y1, x0]+int_img[y0, x0]
-            if input_img[row, col]*count < sum_*(100.-threshold)/100.:
-                out_img[row,col] = 0
-            else:
-                out_img[row,col] = 255
-    return out_img
+        if foreground_length != 0:
+            for i in foreground_gray_level:
+                foreground_hist.append(hist[i])
+                total_fore_hist = sum(foreground_hist)
+                fore_weight = float(total_fore_hist) / imageSize
+
+            if fore_weight != 0:
+
+                fore_mean = np.sum(np.multiply(foreground_gray_level,np.asarray(foreground_hist))) / float(sum(foreground_hist))
+
+        variance.append(back_weight * fore_weight * ((back_mean - fore_mean) **2)) 
+
+    max_variance = np.max(variance)
+    Threshold= variance.index(max_variance)
+    outputImage = image.copy()
+    print(Threshold)
+    outputImage = global_threshold(image,Threshold)
+    return outputImage
+
+def otsu_local_threshold(image,block_size):
+    pass
+
 
 
 def otsu_threshold(img):
@@ -133,5 +160,11 @@ def otsu_threshold(img):
 
 
 
+# image = cv2.imread("Threshold images\Pyramids2.jpg",0)
+# out = otsu_global_threshold(image)
+# #thres = otsu_threshold(image)
+# #print(thres)
+# plt.imshow(out,cmap='gray')
+# plt.show()
 
 

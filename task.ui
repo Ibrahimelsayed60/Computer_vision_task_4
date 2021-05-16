@@ -30,107 +30,105 @@
      <attribute name="title">
       <string>Threshold</string>
      </attribute>
-     <widget class="QWidget" name="">
+     <widget class="QTabWidget" name="tabWidget_2">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>1051</width>
-        <height>291</height>
+        <x>0</x>
+        <y>0</y>
+        <width>1081</width>
+        <height>591</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout" stretch="2,5">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Otsu Threshold</string>
+       </attribute>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>12</x>
+          <y>10</y>
+          <width>1051</width>
+          <height>521</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,1">
+          <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,5">
            <item>
-            <widget class="QLabel" name="label">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Local Threshold</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string> Global Otsu Threshold </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_1">
+               <property name="text">
+                <string>play</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_1">
-             <property name="text">
-              <string>Show</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="PlotWidget" name="widget_1" native="true"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,5">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Global Threshold</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_2">
-             <property name="text">
-              <string>Show</string>
-             </property>
-            </widget>
+            <widget class="PlotWidget" name="widget_3" native="true"/>
            </item>
           </layout>
          </item>
          <item>
-          <widget class="PlotWidget" name="widget_2" native="true"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,5">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="3,1">
+          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,5">
            <item>
-            <widget class="QLabel" name="label_3">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Otsu Threshold</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <item>
+              <widget class="QLabel" name="label_7">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Local Otsu Threshold </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_2">
+               <property name="text">
+                <string>play</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_3">
-             <property name="text">
-              <string>Show</string>
-             </property>
-            </widget>
+            <widget class="PlotWidget" name="widget_1" native="true"/>
            </item>
           </layout>
          </item>
-         <item>
-          <widget class="PlotWidget" name="widget_3" native="true"/>
-         </item>
         </layout>
-       </item>
-      </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Optimal Threshold</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Spectral Threshold</string>
+       </attribute>
+      </widget>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -138,6 +136,28 @@
       <string>unsupervised_segementation</string>
      </attribute>
     </widget>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>2</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout"/>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>2</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

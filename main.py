@@ -15,37 +15,45 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.ui.widget_2.getPlotItem().hideAxis('bottom')
-        self.ui.widget_2.getPlotItem().hideAxis('left')
+        # self.ui.widget_2.getPlotItem().hideAxis('bottom')
+        # self.ui.widget_2.getPlotItem().hideAxis('left')
         self.ui.widget_1.getPlotItem().hideAxis('bottom')
         self.ui.widget_1.getPlotItem().hideAxis('left')
         self.ui.widget_3.getPlotItem().hideAxis('bottom')
         self.ui.widget_3.getPlotItem().hideAxis('left')
 
         self.image_1 = cv2.rotate(cv2.imread("Threshold images\Lenna.png",0),cv2.ROTATE_90_CLOCKWISE)
-        self.image_2 = cv2.rotate(cv2.imread("Threshold images\DNA_011.TIF",0),cv2.ROTATE_90_CLOCKWISE)
+        self.image_2 = cv2.rotate(cv2.imread("Threshold images\Beads.jpg",0),cv2.ROTATE_90_CLOCKWISE)
 
-        self.ui.pushButton_2.clicked.connect(self.doing_global_threshold)
-        self.ui.pushButton_1.clicked.connect(self.doing_local_treshold)
-        self.ui.pushButton_3.clicked.connect(self.doing_otsu)
+        self.ui.pushButton_1.clicked.connect(self.doing_otsu_global)
+        self.ui.pushButton_2.clicked.connect(self.doing_otsu_local)
+        #self.ui.pushButton_3.clicked.connect(self.doing_otsu)
+        #self.ui.comboBox_1.currentIndexChanged[int].connect(self.choose_otsu)
 
 
     def doing_global_threshold(self):
         new_img = threshold.global_threshold(self.image_1, 127)
         out = pg.ImageItem(new_img)
-        self.ui.widget_2.addItem(out)
+        #self.ui.widget_2.addItem(out)
 
     
     def doing_local_treshold(self):
         new_img = threshold.local_threshold(self.image_1)
         out = pg.ImageItem(new_img)
-        self.ui.widget_1.addItem(out)
+        #self.ui.widget_1.addItem(out)
 
-    def doing_otsu(self):
-        thres = threshold.otsu_threshold(self.image_2)
-        new_img = threshold.otsu_global(self.image_2,thres)
+    def doing_otsu_global(self):
+        self.ui.widget_3.clear()
+        new_img = threshold.otsu_global_threshold(self.image_2)
         out = pg.ImageItem(new_img)
         self.ui.widget_3.addItem(out)
+
+    def doing_otsu_local(self):
+        self.ui.widget_1.clear()
+        new_img = threshold.otsu_local(self.image_2)
+        out = pg.ImageItem(new_img)
+        self.ui.widget_1.addItem(out)
+        
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
