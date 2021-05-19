@@ -20,7 +20,7 @@ Steps:
 
   ​	 σ 2 w as the weighed sum of group variances. The best threshold value t* is the value with the minimum within class variance. The within class variance defines as following:
 
-![weights](Threshold images\otsu_image_result\weights.png)
+<img src="Threshold images\otsu_image_result\weights.png" alt="weights" style="zoom:70%;" />
 
 * Otsu Local threshold:
 
@@ -32,7 +32,7 @@ Steps:
 
   * when we apply this threshold in "MRIbrain1.jpg", we get:
 
-    ![otsu_global_local_16_window](Threshold images\otsu_image_result\otsu_global_local_16_window.png)
+    <img src="Threshold images\otsu_image_result\otsu_global_local_16_window.png" alt="otsu_global_local_16_window" style="zoom:70%;" />
 
   * when we apply Local threshold with different sizes of window as follow:
 
