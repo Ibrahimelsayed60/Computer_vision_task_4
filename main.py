@@ -34,9 +34,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget.addItem(out)
 
         self.ui.pushButton_1.clicked.connect(self.doing_otsu_global)
-        self.ui.pushButton_2.clicked.connect(self.doing_otsu_local)
         self.ui.pushButton_3.clicked.connect(self.doing_original_image)
         self.ui.comboBox.currentIndexChanged[int].connect(self.segmentaion)
+        self.ui.comboBox_2.currentIndexChanged[int].connect(self.doing_otsu_local)
 
 
     def doing_global_threshold(self):
@@ -62,8 +62,18 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_3.addItem(out)
 
     def doing_otsu_local(self):
-        self.ui.widget_1.clear()
-        new_img = threshold.otsu_local_threshold(self.image_2,16)
+        if self.ui.comboBox_2.currentIndex() == 1:
+            self.ui.widget_1.clear()
+            new_img = threshold.otsu_local_threshold(self.image_2,16)
+        elif self.ui.comboBox_2.currentIndex() == 2:
+            self.ui.widget_1.clear()
+            new_img = threshold.otsu_local_threshold(self.image_2,32)
+        elif self.ui.comboBox_2.currentIndex() == 3:
+            self.ui.widget_1.clear()
+            new_img = threshold.otsu_local_threshold(self.image_2,64)
+        elif self.ui.comboBox_2.currentIndex() == 4:
+            self.ui.widget_1.clear()
+            new_img = threshold.otsu_local_threshold(self.image_2,128)
         out = pg.ImageItem(new_img)
         self.ui.widget_1.addItem(out)
         

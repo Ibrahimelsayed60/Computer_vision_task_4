@@ -129,10 +129,32 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton_2">
-                   <property name="text">
-                    <string>play</string>
-                   </property>
+                  <widget class="QComboBox" name="comboBox_2">
+                   <item>
+                    <property name="text">
+                     <string>__Size of window____</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>16_window</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>32_window</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>64_window</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>128_window</string>
+                    </property>
+                   </item>
                   </widget>
                  </item>
                 </layout>
