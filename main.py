@@ -35,7 +35,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self.ui.pushButton_1.clicked.connect(self.doing_otsu_global)
         self.ui.pushButton_3.clicked.connect(self.doing_original_image)
-        self.ui.comboBox.currentIndexChanged[int].connect(self.segmentaion)
+        self.ui.comboBox.currentIndexChanged[int].connect(self.segmentation)
         self.ui.comboBox_2.currentIndexChanged[int].connect(self.doing_otsu_local)
 
 
@@ -77,7 +77,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         out = pg.ImageItem(new_img)
         self.ui.widget_1.addItem(out)
         
-    def segmentaion(self):
+    def segmentation(self):
         if self.ui.comboBox.currentIndex() == 0:
             self.ui.widget_4.clear()
         if self.ui.comboBox.currentIndex() == 1:
@@ -91,6 +91,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             segmented_image = centers[labels.flatten()]
             segmented_image = segmented_image.reshape(self.image_3.shape)
             out = pg.ImageItem(segmented_image)
+            self.ui.widget_4.addItem(out)
+        if self.ui.comboBox.currentIndex() == 2:
+            meanshift = segmentation.meanshift(self.image_3)
+            out = meanshift.performMeanShift(self.image_3)
+            out = pg.ImageItem(out)
             self.ui.widget_4.addItem(out)
 
 
