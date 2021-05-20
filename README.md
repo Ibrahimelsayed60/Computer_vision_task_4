@@ -60,10 +60,10 @@ Steps:
 
 * K-Means clustering algorithm is an unsupervised algorithm and it is used to segment the interest area from the background. It clusters, or partitions the given data into K-clusters or parts based on the K-centroids.
 
-  <img src="Segmentation Images\k-means.png" style="zoom:60%;" />
+  <img src="Segmentation Images\k-means.png" style="zoom:40%;" />
 
 ## Mean shift method
 
 *  mean shift treats the clustering problem by supposing that all points given represent samples from some underlying probability density function, with regions of high sample density corresponding to the local maxima of this distribution. To find these local maxima, the algorithm works by allowing the points to attract each other, via what might be considered a short-ranged “gravitational” force. Allowing the points to gravitate towards areas of higher density, one can show that they will eventually coalesce at a series of points, close to the local maxima of the distribution. Those data points that converge to the same local maxima are considered to be members of the same cluster.
 
-  <img src="Segmentation Images\mean-shift.png" style="zoom:60%;" />
+  <img src="Segmentation Images\mean-shift.png" style="zoom:40%;" />
