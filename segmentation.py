@@ -165,3 +165,119 @@ class meanshift():
                 F = self.markPixels(neighbors,mean,F,clusters)
                 clusters+=1
         return self.opImg
+
+class regionGrowing(object):
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+
+    def getX(self):
+        return self.x
+    def getY(self):
+        return self.y
+
+    def getGrayDiff(img,currentPoint,tmpPoint):
+        return abs(int(img[currentPoint.x,currentPoint.y]) - int(img[tmpPoint.x,tmpPoint.y]))
+
+    def selectConnects(p):
+        if p != 0:
+            connects = [Point(-1, -1), Point(0, -1), Point(1, -1), Point(1, 0), Point(1, 1), \
+                Point(0, 1), Point(-1, 1), Point(-1, 0)]
+        else:
+            connects = [ Point(0, -1), Point(1, 0),Point(0, 1), Point(-1, 0)]
+        return connects
+
+    def regionGrow(img,seeds,thresh,p = 1):
+        height, weight = img.shape
+        seedMark = np.zeros(img.shape)
+        seedList = []
+        for seed in seeds:
+            seedList.append(seed)
+            label = 1
+            connects = selectConnects(p)
+        while(len(seedList)>0):
+            currentPoint = seedList.pop(0)
+
+            seedMark[currentPoint.x,currentPoint.y] = label
+        for i in range(8):
+            tmpX = currentPoint.x + connects[i].x
+            tmpY = currentPoint.y + connects[i].y
+        if tmpX < 0 or tmpY < 0 or tmpX >= height or tmpY >= weight:
+            grayDiff = getGrayDiff(img,currentPoint,Point(tmpX,tmpY))
+        if grayDiff < thresh and seedMark[tmpX,tmpY] == 0:
+             seedMark[tmpX,tmpY] = label
+             seedList.append(Point(tmpX,tmpY))
+        return seedMark
+
+
+
+
+class AgglomerativeClustering(object):
+
+    def __init__(self, cluster_count):
+        self.cluster_count = cluster_count
+        self.cluster_item_counts = np.array([])
+        self.labels = np.array([])
+        self.centroids = []
+
+    def fit(self, data):
+        if type(data) is not np.ndarray:
+            data = np.array(data)
+
+        self.cluster_item_counts = np.append(
+            self.cluster_item_counts, np.ones(data.shape[0])
+        )
+        self.labels = np.append(
+            self.labels, [len(self.centroids) + x for x in range(len(data))]
+        )
+        self.centroids += [d for d in data]
+
+        while len(self.cluster_item_counts) != self.cluster_count:
+            min_distance = np.inf
+            i1, i2 = (0, 0)
+            for i in range(len(self.cluster_item_counts)):
+                distances = np.linalg.norm(self.centroids - self.centroids[i], axis=1)
+                distances[distances == 0] = np.inf
+                min_dist = np.min(distances)
+                if min_dist < min_distance:
+                    min_distance = min_dist
+                    i1, i2 = i, np.argmin(distances)
+
+            if i2 < i1:
+                i1, i2 = i2, i1
+            new_centroid = self.weigted_average(
+                self.centroids[i1],
+                self.centroids[i2],
+                self.cluster_item_counts[i1],
+                self.cluster_item_counts[i2],
+            )
+            self.centroids[i1] = new_centroid
+            self.cluster_item_counts[i1] += self.cluster_item_counts[i2]
+            self.cluster_item_counts = np.delete(self.cluster_item_counts, i2)
+            del self.centroids[i2]
+            self.labels[self.labels == i2] = i1
+            self.labels[self.labels > i2] -= 1
+
+        return np.array(self.centroids), self.labels
+
+    def weigted_average(self, centroid1, centroid2, weight1, weight2):
+        new_centroid = [0, 0, 0]
+        for i in range(3):
+            new_centroid[i] = np.average(
+                [centroid1[i], centroid2[i]], weights=[weight1, weight2]
+            )
+        return np.array(new_centroid)
+
+
+    def distortion(data, labels, centroids):
+        """
+        The distortion (clustering error) is the summation of distances between points and their own cluster centroids
+        """
+        n = data.shape[0]
+        centroid_array = np.zeros((n, 3))
+        for i in range(n):
+            label = labels[i]
+            cendroid = centroids[int(label)]
+            centroid_array[i] = cendroid
+
+        return np.linalg.norm(data - centroid_array)

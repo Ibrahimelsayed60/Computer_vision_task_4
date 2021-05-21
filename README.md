@@ -56,18 +56,58 @@ Steps:
 
 
 
-# Image Segmentation:
+# 2. Image Segmentation:
 
  Image segmentation is the classification of an image into different groups.
 
-## k-means
+* Input Image :
+
+## 2.1. k-means
 
 * K-Means clustering algorithm is an unsupervised algorithm and it is used to segment the interest area from the background. It clusters, or partitions the given data into K-clusters or parts based on the K-centroids.
 
   <img src="Segmentation Images\k-means.png" style="zoom:40%;" />
 
-## Mean shift method
+## 2.2. Mean shift method
 
-*  mean shift treats the clustering problem by supposing that all points given represent samples from some underlying probability density function, with regions of high sample density corresponding to the local maxima of this distribution. To find these local maxima, the algorithm works by allowing the points to attract each other, via what might be considered a short-ranged “gravitational” force. Allowing the points to gravitate towards areas of higher density, one can show that they will eventually coalesce at a series of points, close to the local maxima of the distribution. Those data points that converge to the same local maxima are considered to be members of the same cluster.
+*  Mean shift treats the clustering problem by supposing that all points given represent samples from some underlying probability density function, with regions of high sample density corresponding to the local maxima of this distribution. To find these local maxima, the algorithm works by allowing the points to attract each other, via what might be considered a short-ranged “gravitational” force. Allowing the points to gravitate towards areas of higher density, one can show that they will eventually coalesce at a series of points, close to the local maxima of the distribution. Those data points that converge to the same local maxima are considered to be members of the same cluster.
 
   <img src="Segmentation Images\mean-shift.png" style="zoom:40%;" />
+
+
+## 2.3. Agglemorative Method
+The steps of the agglomerative clustering algorithm:
+1. Define each data point as a different cluster, and the point itself as the centroid of the cluster. Also, assign
+1 to item count, and initialize a label array showing centroid indexes in the centroid array.
+2. Find the closest two centroids (minimum distance, maximum similarity).
+3. Add the higher indexed cluster to the lower indexed cluster by combining centroids with average mean and summing item counts.
+4. Replace all labels of the higher indexed cluster with labels of the lower indexed cluster in the labels array.
+5. If the length of the centroids array is equal to K, end the process, and return label array and centroid array.
+Else, go to 2nd step.
+
+* Result:
+
+
+## 2.4. Region Growing Method 
+The basic idea of region growing is to assemble pixels with similar properties to form regions. Firstly, a seed pixel is found for each region to be segmented as the growth starting point, and then the seed pixel and the pixels in the surrounding neighborhood that have the same or similar properties as the seed pixel are merged into the region where the seed pixel is located. These new pixels are treated as new seeds to continue the above process until pixels that do not meet the conditions can be included. Such a region grows into.
+
+* Steps:
+
+1. Scan the image in sequence! Find the first pixel that does not belong, and set the pixel as (x0, Y0);
+
+2. Taking (x0, Y0) as the center, consider the 4 neighborhood pixels (x, y) of (x0, Y0), if (x0, Y0) meets the growth criteria, merge (x, y) and (x0, Y0) in the same region, and push (x, y) onto the stack;
+
+3. Take a pixel from the stack and return it to step 2 as (x0, Y0);
+
+4. When the stack is empty! Return to step 1;
+
+5. Repeat steps 1-4 until each point in the image has attribution. Growth ends.
+
+* Result:
+
+
+
+
+
+
+

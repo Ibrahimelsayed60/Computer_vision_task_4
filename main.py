@@ -9,8 +9,6 @@ import numpy as np
 import threshold
 import cv2
 import segmentation
-import optimal
-import spectral
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(ApplicationWindow, self).__init__()
@@ -27,18 +25,6 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget.getPlotItem().hideAxis('left')
         self.ui.widget_4.getPlotItem().hideAxis('bottom')
         self.ui.widget_4.getPlotItem().hideAxis('left')
-        self.ui.widget_5.getPlotItem().hideAxis('bottom')
-        self.ui.widget_5.getPlotItem().hideAxis('left')
-        self.ui.widget_6.getPlotItem().hideAxis('bottom')
-        self.ui.widget_6.getPlotItem().hideAxis('left')
-        self.ui.widget_7.getPlotItem().hideAxis('bottom')
-        self.ui.widget_7.getPlotItem().hideAxis('left')
-        self.ui.widget_8.getPlotItem().hideAxis('bottom')
-        self.ui.widget_8.getPlotItem().hideAxis('left')
-        self.ui.widget_9.getPlotItem().hideAxis('bottom')
-        self.ui.widget_9.getPlotItem().hideAxis('left')
-        self.ui.widget_10.getPlotItem().hideAxis('bottom')
-        self.ui.widget_10.getPlotItem().hideAxis('left')
 
         self.image_1 = cv2.rotate(cv2.imread("Threshold images\Lenna.png",0),cv2.ROTATE_90_CLOCKWISE)
         self.image_2 = cv2.rotate(cv2.imread("Threshold images\MRIbrain1.jpg",0),cv2.ROTATE_90_CLOCKWISE)
@@ -47,59 +33,26 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         out = pg.ImageItem(self.image_3)
         self.ui.widget.addItem(out)
 
-        self.opimg = cv2.imread("Threshold images\Beads.jpg")
         self.ui.pushButton_1.clicked.connect(self.doing_otsu_global)
         self.ui.pushButton_3.clicked.connect(self.doing_original_image)
-        self.ui.pushButton_4.clicked.connect(self.doing_original_image2)
-        self.ui.pushButton_2.clicked.connect(self.doing_spectral_global_threshold)
         self.ui.comboBox.currentIndexChanged[int].connect(self.segmentation)
         self.ui.comboBox_2.currentIndexChanged[int].connect(self.doing_otsu_local)
-        self.ui.comboBox_3.currentIndexChanged[int].connect(self.optimal)
-        self.ui.comboBox_4.currentIndexChanged[int].connect(self.doing_spectral_local_treshold)
 
 
-    def doing_spectral_global_threshold(self):
-        threshold = spectral.spectral_threshold(self.image_2)
-        outputImage = spectral.global_threshold(self.image_2, threshold)
-        out = pg.ImageItem(outputImage)
-        self.ui.widget_9.addItem(out)
+    def doing_global_threshold(self):
+        new_img = threshold.global_threshold(self.image_1, 127)
+        out = pg.ImageItem(new_img)
+        #self.ui.widget_2.addItem(out)
 
     
-    def doing_spectral_local_treshold(self):
-        if self.ui.comboBox_4.currentIndex() == 5:
-            self.ui.widget_10.clear()
-            new_img = spectral.spectral_local_threshold(self.image_2,256)
-            out = pg.ImageItem(new_img)
-            self.ui.widget_10.addItem(out)
-        elif self.ui.comboBox_4.currentIndex() == 4:
-            self.ui.widget_10.clear()
-            new_img = spectral.spectral_local_threshold(self.image_2,128)
-            out = pg.ImageItem(new_img)
-            self.ui.widget_10.addItem(out)
-        elif self.ui.comboBox_4.currentIndex() == 3:
-            self.ui.widget_10.clear()
-            new_img = spectral.spectral_local_threshold(self.image_2,64)
-            out = pg.ImageItem(new_img)
-            self.ui.widget_10.addItem(out)
-        elif self.ui.comboBox_4.currentIndex() == 2:
-            self.ui.widget_10.clear()
-            new_img = spectral.spectral_local_threshold(self.image_2,32)
-            out = pg.ImageItem(new_img)
-            self.ui.widget_10.addItem(out)
-        elif self.ui.comboBox_4.currentIndex() == 1:
-            self.ui.widget_10.clear()
-            new_img = spectral.spectral_local_threshold(self.image_2,16)
-            out = pg.ImageItem(new_img)
-            self.ui.widget_10.addItem(out)
-
+    def doing_local_treshold(self):
+        new_img = threshold.local_threshold(self.image_1)
+        out = pg.ImageItem(new_img)
+        #self.ui.widget_1.addItem(out)
 
     def doing_original_image(self):
         out = pg.ImageItem(self.image_2)
         self.ui.widget_2.addItem(out)
-
-    def doing_original_image2(self):
-        out = pg.ImageItem(self.image_2)
-        self.ui.widget_8.addItem(out)
 
 
     def doing_otsu_global(self):
@@ -139,30 +92,27 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             segmented_image = segmented_image.reshape(self.image_3.shape)
             out = pg.ImageItem(segmented_image)
             self.ui.widget_4.addItem(out)
+
         if self.ui.comboBox.currentIndex() == 2:
             meanshift = segmentation.meanshift(self.image_3)
             out = meanshift.performMeanShift(self.image_3)
             out = pg.ImageItem(out)
             self.ui.widget_4.addItem(out)
 
-    def optimal(self):
-        if self.ui.comboBox_3.currentIndex() == 0:
-            self.ui.widget_5.clear()
-            self.ui.widget_6.clear()
-            self.ui.widget_7.clear()
-        elif self.ui.comboBox_3.currentIndex() == 1:
-            x = optimal.showop(self.opimg)
-            out = pg.ImageItem(x)
-            self.ui.widget_5.addItem(out)
-        elif self.ui.comboBox_3.currentIndex() == 2:
-            x = optimal.showloc(self.opimg)
-            out = pg.ImageItem(x)
-            self.ui.widget_6.addItem(out)
+        if self.ui.comboBox.currentIndex() == 3:
+            AgglomerativeClustering = segmentation.AgglomerativeClustering(self.image_3) 
+            out = AgglomerativeClustering.distortion(self.image_3)
+            out = pg.ImageItem(out)
+            self.ui.widget_4.addItem(out)
 
-        elif self.ui.comboBox_3.currentIndex() == 3:
-            x = optimal.showglob(self.opimg)
-            out = pg.ImageItem(x)
-            self.ui.widget_7.addItem(out)
+        if self.ui.comboBox.currentIndex() == 4:
+            #seeds = [Point(10,10),Point(82,150),Point(20,300)]
+            regionGrowing = segmentation.regionGrowing(self.image_3)
+            binaryImg = regionGrowing.regionGrow(self.image_3,seeds,10)
+            out = Point.binaryImg(self.image_3)
+            out = pg.ImageItem(out)
+            self.ui.widget_4.addItem(out)
+
 
 
 
