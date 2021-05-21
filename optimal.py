@@ -22,11 +22,11 @@ def Optimal(img):
 
 def globalThreshold(img):
     x = Optimal(img)
-    img = img > x
+    img = img < x
     for i in range(0, img.shape[0], 1):
         for j in range(0, (img.shape[1]), 1):
-            if img[i,j] == True :
-                img[i,j] = 255
+            if img[i,j] == True:
+                img[i,j] = 10
             else:
                 img[i,j] = 0
     return img
