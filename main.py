@@ -34,10 +34,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         out = pg.ImageItem(self.image_3)
         self.ui.widget.addItem(out)
 
+        self.opimg = cv2.imread("Threshold images\Henry_Moore_Sculpture_0252.jpg")
         self.ui.pushButton_1.clicked.connect(self.doing_otsu_global)
         self.ui.pushButton_3.clicked.connect(self.doing_original_image)
         self.ui.comboBox.currentIndexChanged[int].connect(self.segmentation)
         self.ui.comboBox_2.currentIndexChanged[int].connect(self.doing_otsu_local)
+        self.ui.comboBox_3.currentIndexChanged[int].connect(self.optimal)
 
 
     def doing_global_threshold(self):
@@ -98,6 +100,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             out = meanshift.performMeanShift(self.image_3)
             out = pg.ImageItem(out)
             self.ui.widget_4.addItem(out)
+
+    def optimal(self):
+        if self.ui.comboBox.currentIndex() == 0:
+            self.ui.widget_4.clear()
+
+
 
 
 def main():
