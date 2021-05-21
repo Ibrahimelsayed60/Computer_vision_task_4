@@ -32,6 +32,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_6.getPlotItem().hideAxis('left')
         self.ui.widget_7.getPlotItem().hideAxis('bottom')
         self.ui.widget_7.getPlotItem().hideAxis('left')
+        self.ui.widget_8.getPlotItem().hideAxis('bottom')
+        self.ui.widget_8.getPlotItem().hideAxis('left')
 
         self.image_1 = cv2.rotate(cv2.imread("Threshold images\Lenna.png",0),cv2.ROTATE_90_CLOCKWISE)
         self.image_2 = cv2.rotate(cv2.imread("Threshold images\MRIbrain1.jpg",0),cv2.ROTATE_90_CLOCKWISE)
@@ -43,14 +45,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.opimg = cv2.imread("Threshold images\Beads.jpg")
         self.ui.pushButton_1.clicked.connect(self.doing_otsu_global)
         self.ui.pushButton_3.clicked.connect(self.doing_original_image)
+        self.ui.pushButton_4.clicked.connect(self.doing_original_image2)
         self.ui.comboBox.currentIndexChanged[int].connect(self.segmentation)
         self.ui.comboBox_2.currentIndexChanged[int].connect(self.doing_otsu_local)
         self.ui.comboBox_3.currentIndexChanged[int].connect(self.optimal)
 
 
-    def doing_global_threshold(self):
-        new_img = threshold.global_threshold(self.image_1, 127)
-        out = pg.ImageItem(new_img)
+    def doing_spectral_global_threshold(self):
+        threshold = 
         #self.ui.widget_2.addItem(out)
 
     
@@ -62,6 +64,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
     def doing_original_image(self):
         out = pg.ImageItem(self.image_2)
         self.ui.widget_2.addItem(out)
+
+    def doing_original_image2(self):
+        out = pg.ImageItem(self.image_2)
+        self.ui.widget_8.addItem(out)
 
 
     def doing_otsu_global(self):
