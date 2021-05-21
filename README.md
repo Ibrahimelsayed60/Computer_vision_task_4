@@ -52,6 +52,10 @@ Steps:
 
       <img src="Threshold images\otsu_image_result\otsu_local_128.png" alt="otsu_local_128" style="zoom:70%;" />
 
+## Spectral Threshold:
+
+
+
 # Image Segmentation:
 
  Image segmentation is the classification of an image into different groups.
