@@ -102,9 +102,14 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.widget_4.addItem(out)
 
     def optimal(self):
-        if self.ui.comboBox.currentIndex() == 0:
-            self.ui.widget_4.clear()
-
+        if self.ui.comboBox_3.currentIndex() == 0:
+            self.ui.widget_5.clear()
+            self.ui.widget_6.clear()
+            self.ui.widget_7.clear()
+        if self.ui.comboBox_3.currentIndex() == 1:
+            x = optimal.showop(self.opimg)
+            out = pg.ImageItem(x)
+            self.ui.widget_5.addItem(out)
 
 
 

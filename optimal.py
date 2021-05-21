@@ -3,29 +3,9 @@ import numpy as np
 import  matplotlib.pyplot as plt
 np.seterr(over='ignore')
 
-def global_threshold(img):
-    background_sum = (img[0, 0] + img[0, -1] + img[-1, 0] + img[-1, -1])
-    foreground_sum = np.sum(img) - background_sum
-    background_mean = background_sum / 4
-    foreground_mean = foreground_sum / (np.size(img) - 4)
-    t = (foreground_mean + background_mean) / 2
-    while True:
-        background_mean = np.mean(img[img < t])
-        foreground_mean = np.mean(img[img > t])
 
-        if (t == (background_mean + foreground_mean) / 2):
-            break
-        t = (background_mean + foreground_mean) / 2
-    img = img > t
-    for i in range(img.shape[0]):
-        for j in range(img.shape[1]):
-            if img[i,j] == True :
-                img[i,j] = 255
-            else:
-                img[i,j] = 0
-    return img
 
-def optimal(img):
+def Optimal(img):
     background_sum = (img[0,0] + img[0,-1] + img[-1,0] +img[-1,-1])
     foreground_sum = np.sum(img) - background_sum
     background_mean = background_sum/4
@@ -39,6 +19,17 @@ def optimal(img):
             break
         t = (background_mean+foreground_mean)/2
     return  t
+
+def global_threshold(img):
+    x = Optimal(img)
+    img = img > x
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            if img[i,j] == True :
+                img[i,j] = 255
+            else:
+                img[i,j] = 0
+    return img
 
 def localOptimalThresholding(image, block_size):
     if image.shape[0] != image.shape[1]:
@@ -105,18 +96,25 @@ def localOptimalThresholding(image, block_size):
     # resize output  image back to original size
     outputImage = cv2.resize(outputImage, (image.shape[1], image.shape[0]))
     return outputImage
+def togray(img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return gray
 
-img = cv2.imread("Threshold images\Henry_Moore_Sculpture_0252.jpg")
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-op = optimal(gray)
+def showop(img):
+    gs = togray(img)
+    op = Optimal(gs)
+    img = (gs >= op)
+    return img
+
+
 # cv2.imwrite("optimal.jpg",op)
-plt.imshow(localOptimalThresholding(gray,100))
-plt.show()
-plt.imshow(gray >= op)
-plt.show()
+# plt.imshow(localOptimalThresholding(gray,100))
+# plt.show()
+# opimg = cv2.imread("Threshold images\Henry_Moore_Sculpture_0252.jpg")
+# plt.imshow(showop(opimg))
+# plt.show()
 
-plt.imshow(global_threshold(gray))
-plt.show()
+
 
 
 
