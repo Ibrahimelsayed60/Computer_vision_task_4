@@ -9,6 +9,7 @@ import numpy as np
 import threshold
 import cv2
 import segmentation
+import optimal
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(ApplicationWindow, self).__init__()
