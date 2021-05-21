@@ -20,18 +20,18 @@ def Optimal(img):
         t = (background_mean+foreground_mean)/2
     return  t
 
-def global_threshold(img):
+def globalThreshold(img):
     x = Optimal(img)
     img = img > x
-    for i in range(img.shape[0]):
-        for j in range(img.shape[1]):
+    for i in range(0, img.shape[0], 1):
+        for j in range(0, (img.shape[1]), 1):
             if img[i,j] == True :
                 img[i,j] = 255
             else:
                 img[i,j] = 0
     return img
 
-def localOptimalThresholding(image, block_size):
+def localOptimal(image, block_size):
     if image.shape[0] != image.shape[1]:
         if image.shape[0] > image.shape[1]:
             resizedImage = cv2.resize(image, (image.shape[0], image.shape[0]))
@@ -96,6 +96,7 @@ def localOptimalThresholding(image, block_size):
     # resize output  image back to original size
     outputImage = cv2.resize(outputImage, (image.shape[1], image.shape[0]))
     return outputImage
+
 def togray(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     return gray
@@ -106,13 +107,15 @@ def showop(img):
     img = (gs >= op)
     return img
 
+def showglob(img):
+    gs = togray(img)
+    op = globalThreshold(gs)
+    return op
 
-# cv2.imwrite("optimal.jpg",op)
-# plt.imshow(localOptimalThresholding(gray,100))
-# plt.show()
-# opimg = cv2.imread("Threshold images\Henry_Moore_Sculpture_0252.jpg")
-# plt.imshow(showop(opimg))
-# plt.show()
+def showloc(img):
+    gs = togray(img)
+    op = localOptimal(gs,100)
+    return op
 
 
 

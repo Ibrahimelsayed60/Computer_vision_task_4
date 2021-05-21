@@ -26,6 +26,12 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget.getPlotItem().hideAxis('left')
         self.ui.widget_4.getPlotItem().hideAxis('bottom')
         self.ui.widget_4.getPlotItem().hideAxis('left')
+        self.ui.widget_5.getPlotItem().hideAxis('bottom')
+        self.ui.widget_5.getPlotItem().hideAxis('left')
+        self.ui.widget_6.getPlotItem().hideAxis('bottom')
+        self.ui.widget_6.getPlotItem().hideAxis('left')
+        self.ui.widget_7.getPlotItem().hideAxis('bottom')
+        self.ui.widget_7.getPlotItem().hideAxis('left')
 
         self.image_1 = cv2.rotate(cv2.imread("Threshold images\Lenna.png",0),cv2.ROTATE_90_CLOCKWISE)
         self.image_2 = cv2.rotate(cv2.imread("Threshold images\MRIbrain1.jpg",0),cv2.ROTATE_90_CLOCKWISE)
@@ -34,7 +40,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         out = pg.ImageItem(self.image_3)
         self.ui.widget.addItem(out)
 
-        self.opimg = cv2.imread("Threshold images\Henry_Moore_Sculpture_0252.jpg")
+        self.opimg = cv2.imread("Threshold images\Beads.jpg")
         self.ui.pushButton_1.clicked.connect(self.doing_otsu_global)
         self.ui.pushButton_3.clicked.connect(self.doing_original_image)
         self.ui.comboBox.currentIndexChanged[int].connect(self.segmentation)
@@ -106,10 +112,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
             self.ui.widget_5.clear()
             self.ui.widget_6.clear()
             self.ui.widget_7.clear()
-        if self.ui.comboBox_3.currentIndex() == 1:
+        elif self.ui.comboBox_3.currentIndex() == 1:
             x = optimal.showop(self.opimg)
             out = pg.ImageItem(x)
             self.ui.widget_5.addItem(out)
+        elif self.ui.comboBox_3.currentIndex() == 2:
+            x = optimal.showloc(self.opimg)
+            out = pg.ImageItem(x)
+            self.ui.widget_6.addItem(out)
+
+        elif self.ui.comboBox_3.currentIndex() == 3:
+            x = optimal.showglob(self.opimg)
+            out = pg.ImageItem(x)
+            self.ui.widget_7.addItem(out)
 
 
 
