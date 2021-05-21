@@ -10,6 +10,7 @@ import threshold
 import cv2
 import segmentation
 import optimal
+import spectral
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(ApplicationWindow, self).__init__()
@@ -34,6 +35,10 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.widget_7.getPlotItem().hideAxis('left')
         self.ui.widget_8.getPlotItem().hideAxis('bottom')
         self.ui.widget_8.getPlotItem().hideAxis('left')
+        self.ui.widget_9.getPlotItem().hideAxis('bottom')
+        self.ui.widget_9.getPlotItem().hideAxis('left')
+        self.ui.widget_10.getPlotItem().hideAxis('bottom')
+        self.ui.widget_10.getPlotItem().hideAxis('left')
 
         self.image_1 = cv2.rotate(cv2.imread("Threshold images\Lenna.png",0),cv2.ROTATE_90_CLOCKWISE)
         self.image_2 = cv2.rotate(cv2.imread("Threshold images\MRIbrain1.jpg",0),cv2.ROTATE_90_CLOCKWISE)
@@ -46,20 +51,47 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.ui.pushButton_1.clicked.connect(self.doing_otsu_global)
         self.ui.pushButton_3.clicked.connect(self.doing_original_image)
         self.ui.pushButton_4.clicked.connect(self.doing_original_image2)
+        self.ui.pushButton_2.clicked.connect(self.doing_spectral_global_threshold)
         self.ui.comboBox.currentIndexChanged[int].connect(self.segmentation)
         self.ui.comboBox_2.currentIndexChanged[int].connect(self.doing_otsu_local)
         self.ui.comboBox_3.currentIndexChanged[int].connect(self.optimal)
+        self.ui.comboBox_4.currentIndexChanged[int].connect(self.doing_spectral_local_treshold)
 
 
     def doing_spectral_global_threshold(self):
-        threshold = 
-        #self.ui.widget_2.addItem(out)
+        threshold = spectral.spectral_threshold(self.image_2)
+        outputImage = spectral.global_threshold(self.image_2, threshold)
+        out = pg.ImageItem(outputImage)
+        self.ui.widget_9.addItem(out)
 
     
-    def doing_local_treshold(self):
-        new_img = threshold.local_threshold(self.image_1)
-        out = pg.ImageItem(new_img)
-        #self.ui.widget_1.addItem(out)
+    def doing_spectral_local_treshold(self):
+        if self.ui.comboBox_4.currentIndex() == 5:
+            self.ui.widget_10.clear()
+            new_img = spectral.spectral_local_threshold(self.image_2,256)
+            out = pg.ImageItem(new_img)
+            self.ui.widget_10.addItem(out)
+        elif self.ui.comboBox_4.currentIndex() == 4:
+            self.ui.widget_10.clear()
+            new_img = spectral.spectral_local_threshold(self.image_2,128)
+            out = pg.ImageItem(new_img)
+            self.ui.widget_10.addItem(out)
+        elif self.ui.comboBox_4.currentIndex() == 3:
+            self.ui.widget_10.clear()
+            new_img = spectral.spectral_local_threshold(self.image_2,64)
+            out = pg.ImageItem(new_img)
+            self.ui.widget_10.addItem(out)
+        elif self.ui.comboBox_4.currentIndex() == 2:
+            self.ui.widget_10.clear()
+            new_img = spectral.spectral_local_threshold(self.image_2,32)
+            out = pg.ImageItem(new_img)
+            self.ui.widget_10.addItem(out)
+        elif self.ui.comboBox_4.currentIndex() == 1:
+            self.ui.widget_10.clear()
+            new_img = spectral.spectral_local_threshold(self.image_2,16)
+            out = pg.ImageItem(new_img)
+            self.ui.widget_10.addItem(out)
+
 
     def doing_original_image(self):
         out = pg.ImageItem(self.image_2)

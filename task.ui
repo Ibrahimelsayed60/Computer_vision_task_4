@@ -360,6 +360,11 @@
                      <string>128_window</string>
                     </property>
                    </item>
+                   <item>
+                    <property name="text">
+                     <string>256_window</string>
+                    </property>
+                   </item>
                   </widget>
                  </item>
                 </layout>
